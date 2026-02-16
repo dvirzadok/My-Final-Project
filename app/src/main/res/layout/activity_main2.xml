@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/bottom_nav_bar"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:orientation="horizontal"
+    android:background="@android:color/white"
+    android:gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- כפתור מתאמנים -->
+    <LinearLayout
+        android:id="@+id/nav_trainees"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_nav_trainees"
+            android:layout_width="44dp"
+            android:layout_height="43dp"
+            android:contentDescription="מתאמנים"
+            android:src="@drawable/trainees" />
+
+        <TextView
+            android:id="@+id/txt_nav_trainees"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="מתאמנים"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- כפתור תוכניות אימון -->
+    <LinearLayout
+        android:id="@+id/nav_plans"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_nav_plans"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/workoutPlanes"
+            android:contentDescription="תוכניות אימון" />
+
+        <TextView
+            android:id="@+id/txt_nav_plans"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="תוכניות אימון"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- כפתור התקדמות -->
+    <LinearLayout
+        android:id="@+id/nav_progress"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_nav_progress"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/progress"
+            android:contentDescription="התקדמות" />
+
+        <TextView
+            android:id="@+id/txt_nav_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="התקדמות"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- כפתור תשלומים -->
+    <LinearLayout
+        android:id="@+id/nav_payments"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/img_nav_payments"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/payments"
+            android:contentDescription="תשלומים" />
+
+        <TextView
+            android:id="@+id/txt_nav_payments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="תשלומים"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+</LinearLayout>
+

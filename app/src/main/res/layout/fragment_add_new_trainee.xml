@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="20dp">
+
+        <!-- כותרת -->
+        <TextView
+            android:id="@+id/txtTitleAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="הוספת מתאמן"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- שם -->
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="שם מלא"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- גיל -->
+        <EditText
+            android:id="@+id/etAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="גיל"
+            android:inputType="number"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- משקל -->
+        <EditText
+            android:id="@+id/etWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="משקל (ק״ג)"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- מנוי -->
+        <EditText
+            android:id="@+id/etSubscription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="סוג מנוי (מחיר)"
+            android:inputType="text"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- כיתוב יום גבייה -->
+        <TextView
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="יום גבייה בחודש"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="6dp"/>
+
+        <!-- Spinner יום גבייה -->
+        <Spinner
+            android:id="@+id/spinnerChargeDay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"/>
+
+
+        <!-- מטרה -->
+        <EditText
+            android:id="@+id/etGoal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="מטרה (חיטוב / מסה / כוח...)"
+            android:inputType="text"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- כפתור שמירה -->
+        <Button
+            android:id="@+id/btnSaveTrainee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="שמור מתאמן"
+            android:backgroundTint="#03A9F4"
+            android:textAllCaps="false"/>
+
+    </LinearLayout>
+
+</ScrollView>

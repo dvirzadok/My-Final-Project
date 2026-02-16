@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="end"
+        android:padding="20dp">
+
+        <!-- בחירת מתאמן -->
+        <Spinner
+            android:id="@+id/spinnerTrainees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- סטטוס מנוי -->
+        <TextView
+            android:id="@+id/txtStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="סטטוס:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"/>
+
+        <!-- תאריך סיום -->
+        <TextView
+            android:id="@+id/txtEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="תאריך סיום:"
+            android:layout_marginTop="8dp"/>
+
+        <!-- כמה נשאר לשלם -->
+        <TextView
+            android:id="@+id/txtRemaining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="נותר לתשלום:"
+            android:layout_marginTop="16dp"/>
+
+        <!-- תשלום חודשי -->
+        <TextView
+            android:id="@+id/txtMonthly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="תשלום חודשי:"
+            android:layout_marginTop="8dp"/>
+
+        <!-- חודשים ששולמו -->
+        <TextView
+            android:id="@+id/txtMonthsPaid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="חודשים ששולמו:"
+            android:layout_marginTop="8dp"/>
+
+        <!-- תאריך חיוב -->
+        <TextView
+            android:id="@+id/txtPaymentDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="תאריך חיוב:"
+            android:layout_marginTop="8dp"/>
+
+    </LinearLayout>
+
+</ScrollView>
