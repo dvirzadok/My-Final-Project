@@ -2,6 +2,7 @@ package com.example.myfinalproject;
 
 public class Exercise {
 
+    private String id;
     private String name;       // שם התרגיל
     private int sets;          // מספר סטים
     private int reps;          // מספר חזרות
@@ -21,22 +22,27 @@ public class Exercise {
 
     //Getters
     public String getName() {
+
         return name;
     }
 
     public int getSets() {
+
         return sets;
     }
 
     public int getReps() {
+
         return reps;
     }
 
     public double getWeight() {
+
         return weight;
     }
 
     public String getNotes() {
+
         return notes;
     }
 
@@ -46,18 +52,22 @@ public class Exercise {
     }
 
     public void setSets(int sets) {
+
         this.sets = sets;
     }
 
     public void setReps(int reps) {
+
         this.reps = reps;
     }
 
     public void setWeight(double weight) {
+
         this.weight = weight;
     }
 
     public void setNotes(String notes) {
+
         this.notes = notes;
     }
 }

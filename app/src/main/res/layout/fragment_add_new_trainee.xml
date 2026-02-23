@@ -86,6 +86,15 @@
             android:inputType="text"
             android:layout_marginBottom="24dp"/>
 
+        <!-- טלפון -->
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="מספר טלפון"
+            android:inputType="phone"
+            android:layout_marginBottom="16dp"/>
+
         <!-- כפתור שמירה -->
         <Button
             android:id="@+id/btnSaveTrainee"
