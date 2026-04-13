@@ -12,7 +12,9 @@ public class Exercise {
     public Exercise() {
     }
 
-    public Exercise(String name, int sets, int reps, double weight, String notes) {
+    public Exercise(String id, String name, int sets, int reps, double weight, String notes) {
+
+        this.id = id;
         this.name = name;
         this.sets = sets;
         this.reps = reps;
@@ -21,6 +23,11 @@ public class Exercise {
     }
 
     //Getters
+    public String getId() {
+
+        return id;
+    }
+
     public String getName() {
 
         return name;

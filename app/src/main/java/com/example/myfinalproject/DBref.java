@@ -5,6 +5,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class DBref {
 
+    //הקלאס ששומר הפניות לfirebace
+
     //פניתי למאגר הfireBace בכדי להגיד לי מה המיקום - איפה נמצא הDB
     public static FirebaseDatabase DBlocation = FirebaseDatabase.getInstance();
     //משתמש במיקום הראשי ותן לי את הענף שנקרא Trainees
