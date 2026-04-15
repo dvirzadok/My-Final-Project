@@ -9,10 +9,9 @@ public class Trainee {
     private String name;
     private int age;
     private String phone;
-
     private double weight;
     private double height;
-
+    private String goal;
     private double monthlyCost;      // כמה משלם כל חודש
     private double remainingDebt;    // כמה נשאר לשלם
 
@@ -38,6 +37,7 @@ public class Trainee {
         this.phone = phone;
         this.weight = weight;
         this.height = height;
+        this.goal = goal;
         this.monthlyCost = monthlyCost;
         this.remainingDebt = remainingDebt;
         this.dayOfPayment = dayOfPayment;
@@ -47,18 +47,22 @@ public class Trainee {
 
     //Getters
     public String getId() {
+
         return id;
     }
 
     public String getName() {
+
         return name;
     }
 
     public int getAge() {
+
         return age;
     }
 
     public String getPhone() {
+
         return phone;
     }
 
@@ -70,37 +74,48 @@ public class Trainee {
         return height;
     }
 
+    public String getGoal(){
+        return goal;
+    }
     public double getMonthlyCost() {
+
         return monthlyCost;
     }
 
     public double getRemainingDebt() {
+
         return remainingDebt;
     }
 
     public int getDayOfPayment() {
+
         return dayOfPayment;
     }
 
     public String getSubscriptionEndDate() {
+
         return subscriptionEndDate;
     }
 
     public List<Double> getWeightTracking() {
+
         return weightTracking;
     }
 
 
     //Setters
     public void setId(String id) {
+
         this.id = id;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
     public void setAge(int age) {
+
         this.age = age;
     }
 
@@ -116,6 +131,9 @@ public class Trainee {
         this.height = height;
     }
 
+    public void setGoal(String goal){
+        this.goal = goal;
+    }
     public void setMonthlyCost(double monthlyCost) {
         this.monthlyCost = monthlyCost;
     }
