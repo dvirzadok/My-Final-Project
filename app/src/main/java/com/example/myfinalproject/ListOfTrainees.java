@@ -1,67 +1,74 @@
 package com.example.myfinalproject;
 
-import android.os.Bundle;
+import static android.content.Context.MODE_PRIVATE;
 
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ListOfTrainees#newInstance} factory method to
- * create an instance of this fragment.
- */
+public class ListOfTrainees extends Fragment {
 
+    private RecyclerView recyclerView;
+    private TraineeAdapter adapter;
+    private ArrayList<String> traineeList;
+    private Button btnAddTrainee;
 
-    public class ListOfTrainees extends Fragment {
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_list_of_trainees, container, false);
 
-        private RecyclerView recyclerView;
-        private TraineeAdapter adapter;
-        private List<Trainee> traineeList;
+        // 1. קישור ה-RecyclerView
+        recyclerView = view.findViewById(R.id.recyclerTrainees);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        // 2. הגדרת כפתור הוספה ומעבר פרגמנט
+        btnAddTrainee = view.findViewById(R.id.btnAddTrainee);
+        btnAddTrainee.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.nav_host_fragment_content_main, new AddNewTrainee())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
-            View view = inflater.inflate(R.layout.fragment_list_of_trainees, container, false);
+        // 3. טעינת הנתונים מה-SharedPreferences
+        loadTraineesFromSP();
 
-            recyclerView = view.findViewById(R.id.recyclerTrainees);
+        return view;
+    }
 
-            // יצירת נתונים זמניים לבדיקה
-            traineeList = new ArrayList<>();
+    private void loadTraineesFromSP() {
+        if (getContext() != null) {
+            SharedPreferences sp = getContext().getSharedPreferences("MyProjectPrefs", MODE_PRIVATE);
+            String json = sp.getString("trainees_list", "[]");
 
-            Trainee t1 = new Trainee();
-            t1.setName("דביר");
-            t1.setGoal("מסה");
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<String>>(){}.getType();
+            traineeList = gson.fromJson(json, type);
 
-            Trainee t2 = new Trainee();
-            t2.setName("יוסי");
-            t2.setGoal("חיטוב");
+            if (traineeList == null) {
+                traineeList = new ArrayList<>();
+            }
 
-            Trainee t3 = new Trainee();
-            t3.setName("אורי");
-            t3.setGoal("כוח");
-
-            traineeList.add(t1);
-            traineeList.add(t2);
-            traineeList.add(t3);
-
-            // יצירת adapter
-            adapter = new TraineeAdapter(traineeList, getContext());
-
-            // איך הרשימה תוצג
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-            // חיבור
+            adapter = new TraineeAdapter(traineeList);
             recyclerView.setAdapter(adapter);
-
-            return view;
         }
     }
+}

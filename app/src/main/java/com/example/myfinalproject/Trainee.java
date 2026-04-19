@@ -28,7 +28,7 @@ public class Trainee {
     public Trainee(String id, String name, int age, String phone,
                    double weight, double height,
                    double monthlyCost, double remainingDebt,
-                   int dayOfPayment, String subscriptionEndDate,
+                   int dayOfPayment, String subscriptionEndDate, String goal,
                    List<Double> weightTracking) {
 
         this.id = id;

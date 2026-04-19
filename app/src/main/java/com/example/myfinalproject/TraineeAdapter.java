@@ -1,6 +1,5 @@
 package com.example.myfinalproject;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,54 +12,48 @@ import java.util.List;
 
 public class TraineeAdapter extends RecyclerView.Adapter<TraineeAdapter.TraineeViewHolder> {
 
-    private List<Trainee> trainees;
-    private Context context;
+    private List<String> trainees;
 
-    public TraineeAdapter(List<Trainee> trainees, Context context) {
+    public TraineeAdapter(List<String> trainees) {
         this.trainees = trainees;
-        this.context = context;
     }
 
-    // ViewHolder
     public static class TraineeViewHolder extends RecyclerView.ViewHolder {
-
         TextView tvName;
         TextView tvGoal;
 
         public TraineeViewHolder(@NonNull View itemView) {
             super(itemView);
-
             tvName = itemView.findViewById(R.id.tvName);
             tvGoal = itemView.findViewById(R.id.tvGoal);
         }
     }
 
-    // יצירת כרטיס
     @NonNull
     @Override
     public TraineeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.trainee_card, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.trainee_card, parent, false);
         return new TraineeViewHolder(view);
     }
 
-    // הכנסת נתונים לכרטיס
     @Override
     public void onBindViewHolder(@NonNull TraineeViewHolder holder, int position) {
-        Trainee trainee = trainees.get(position);
+        String fullInfo = trainees.get(position); // מקבל למשל: "ישראל - חיטוב"
 
-        holder.tvName.setText(trainee.getName());
-
-        // אם אין מטרה - שלא יקרוס
-        if (trainee.getGoal() != null && !trainee.getGoal().isEmpty()) {
-            holder.tvGoal.setText("מטרה: " + trainee.getGoal());
+        // פירוק המחרוזת לפי המקף ששמנו ב-Splash
+        if (fullInfo != null && fullInfo.contains(" - ")) {
+            String[] parts = fullInfo.split(" - ");
+            holder.tvName.setText(parts[0]); // החלק שלפני המקף (השם)
+            holder.tvGoal.setText("מטרה: " + parts[1]); // החלק שאחרי המקף (המטרה)
         } else {
-            holder.tvGoal.setText("מטרה לא הוגדרה");
+            // הגנה למקרה שהמחרוזת לא בפורמט הצפוי
+            holder.tvName.setText(fullInfo);
+            holder.tvGoal.setText("");
         }
     }
 
-    // כמות פריטים
     @Override
     public int getItemCount() {
-        return trainees.size();
+        return (trainees != null) ? trainees.size() : 0;
     }
 }
