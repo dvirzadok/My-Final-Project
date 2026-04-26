@@ -1,5 +1,6 @@
 package com.example.myfinalproject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Trainee {
@@ -12,6 +13,8 @@ public class Trainee {
     private double weight;
     private double height;
     private String goal;
+    public static ArrayList<String> exerciseIds = new ArrayList<>();
+
     private double monthlyCost;      // כמה משלם כל חודש
     private double remainingDebt;    // כמה נשאר לשלם
 
@@ -43,6 +46,7 @@ public class Trainee {
         this.dayOfPayment = dayOfPayment;
         this.subscriptionEndDate = subscriptionEndDate;
         this.weightTracking = weightTracking;
+        exerciseIds.add(id);
     }
 
     //Getters
@@ -77,6 +81,7 @@ public class Trainee {
     public String getGoal(){
         return goal;
     }
+
     public double getMonthlyCost() {
 
         return monthlyCost;
@@ -102,6 +107,9 @@ public class Trainee {
         return weightTracking;
     }
 
+    public static ArrayList<String> getExerciseIds() {
+        return exerciseIds;
+    }
 
     //Setters
     public void setId(String id) {
@@ -152,5 +160,13 @@ public class Trainee {
 
     public void setWeightTracking(List<Double> weightTracking) {
         this.weightTracking = weightTracking;
+    }
+
+    public static void addExerciseId(String exerciseId) {
+        exerciseIds.add(exerciseId);
+    }
+    //יכול להיות שנוסיף כפתור למחוק את כל האימונים במכה
+    public static void clearExerciseIds() {
+        exerciseIds.clear();
     }
 }
