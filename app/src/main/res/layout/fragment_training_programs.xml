@@ -44,7 +44,7 @@
         android:id="@+id/btnAddExercise"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ערוך תרגיל ➕"
+        android:text="הוסף תרגיל ➕"
         android:backgroundTint="#03A9F4"
         android:textAllCaps="false"
         android:layout_marginTop="12dp"/>

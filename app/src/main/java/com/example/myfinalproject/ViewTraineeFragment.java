@@ -47,7 +47,6 @@ public class ViewTraineeFragment extends Fragment {
             tvAge.setText("גיל: " + t.getAge());
             tvPhone.setText("טלפון: " + t.getPhone());
             tvWeight.setText("משקל: " + t.getWeight());
-            tvHeight.setText("גובה: " + t.getHeight());
             tvGoal.setText("מטרה: " + t.getGoal());
             tvMonthlyCost.setText("תשלום חודשי: " + t.getMonthlyCost());
             tvDebt.setText("חוב: " + t.getRemainingDebt());

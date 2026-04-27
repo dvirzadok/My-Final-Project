@@ -79,7 +79,7 @@ public class AddNewTrainee extends Fragment {
         List<Double> weightTracking = new ArrayList<>();
         weightTracking.add(weight);
 
-        Trainee trainee = new Trainee(id, name, Integer.parseInt(ageStr), phone, weight, 0,
+        Trainee trainee = new Trainee(id, name, Integer.parseInt(ageStr), phone, weight,
                 Double.parseDouble(subscriptionStr), 0, (int) spinnerChargeDay.getSelectedItem(), "",goal , weightTracking);
 
         DBref.TraineesRef.child(id).setValue(trainee)

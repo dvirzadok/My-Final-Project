@@ -11,7 +11,6 @@ public class Trainee {
     private int age;
     private String phone;
     private double weight;
-    private double height;
     private String goal;
     public static ArrayList<String> exerciseIds = new ArrayList<>();
 
@@ -29,7 +28,7 @@ public class Trainee {
 
 
     public Trainee(String id, String name, int age, String phone,
-                   double weight, double height,
+                   double weight,
                    double monthlyCost, double remainingDebt,
                    int dayOfPayment, String subscriptionEndDate, String goal,
                    List<Double> weightTracking) {
@@ -39,7 +38,6 @@ public class Trainee {
         this.age = age;
         this.phone = phone;
         this.weight = weight;
-        this.height = height;
         this.goal = goal;
         this.monthlyCost = monthlyCost;
         this.remainingDebt = remainingDebt;
@@ -72,10 +70,6 @@ public class Trainee {
 
     public double getWeight() {
         return weight;
-    }
-
-    public double getHeight() {
-        return height;
     }
 
     public String getGoal(){
@@ -135,9 +129,6 @@ public class Trainee {
         this.weight = weight;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
-    }
 
     public void setGoal(String goal){
         this.goal = goal;

@@ -94,6 +94,7 @@
         <Button
             android:id="@+id/btnEdit"
             android:text="ערוך מתאמן"
+            android:backgroundTint="#03A9F4"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
