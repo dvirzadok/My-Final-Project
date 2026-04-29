@@ -15,7 +15,6 @@ public class TraineeAdapter extends RecyclerView.Adapter<TraineeAdapter.TraineeV
     private List<MiniTrainee> trainees;      // רשימת מתאמנים (אובייקטים ולא String)
     private OnItemClickListener listener;    // מאזין ללחיצה על כרטיס
 
-    // 인터페이스 (ממשק) כדי להעביר לחיצה החוצה לפרגמנט
     public interface OnItemClickListener {
         void onItemClick(MiniTrainee trainee);   // מחזיר את המתאמן שנלחץ
     }
