@@ -5,33 +5,33 @@ import java.util.List;
 
 public class Trainee {
 
-
-    private String id;         //מזהה ייחודי
+    private String id;
     private String name;
     private int age;
     private String phone;
     private double weight;
     private String goal;
-    public static ArrayList<String> exerciseIds = new ArrayList<>();
 
-    private double monthlyCost;      // כמה משלם כל חודש
-    private double remainingDebt;    // כמה נשאר לשלם
+    private ArrayList<String> exerciseIds; // רשימת מזהי תרגילים של המתאמן
+
+    private double monthlyCost;
+    private double remainingDebt;
 
     private int dayOfPayment;
-    private String subscriptionEndDate; // תאריך סיום מנוי (לצורך התראות)
+    private String subscriptionEndDate;
 
-    private List<Double> weightTracking; //בכל סוף שבוע הוא מעדכן את המשקל הנתון האחרון
-
+    private List<Double> weightTracking;
 
     public Trainee() {
+        // חשוב לפיירבייס
     }
-
 
     public Trainee(String id, String name, int age, String phone,
                    double weight,
                    double monthlyCost, double remainingDebt,
                    int dayOfPayment, String subscriptionEndDate, String goal,
-                   List<Double> weightTracking) {
+                   List<Double> weightTracking,
+                   ArrayList<String> exerciseIds) {
 
         this.id = id;
         this.name = name;
@@ -44,120 +44,81 @@ public class Trainee {
         this.dayOfPayment = dayOfPayment;
         this.subscriptionEndDate = subscriptionEndDate;
         this.weightTracking = weightTracking;
-        exerciseIds.add(id);
+
+        // אם אין נתונים מפיירבייס → נאתחל ריק
+        if (exerciseIds != null) {
+            this.exerciseIds = exerciseIds;
+        } else {
+            this.exerciseIds = new ArrayList<>();
+        }
     }
 
-    //Getters
-    public String getId() {
+    // Getters
 
-        return id;
+    public String getId() { return id; }
+
+    public String getName() { return name; }
+
+    public int getAge() { return age; }
+
+    public String getPhone() { return phone; }
+
+    public double getWeight() { return weight; }
+
+    public String getGoal() { return goal; }
+
+    public double getMonthlyCost() { return monthlyCost; }
+
+    public double getRemainingDebt() { return remainingDebt; }
+
+    public int getDayOfPayment() { return dayOfPayment; }
+
+    public String getSubscriptionEndDate() { return subscriptionEndDate; }
+
+    public List<Double> getWeightTracking() { return weightTracking; }
+
+    public ArrayList<String> getExerciseIds() { return exerciseIds; }
+
+    // Setters
+
+    public void setId(String id) { this.id = id; }
+
+    public void setName(String name) { this.name = name; }
+
+    public void setAge(int age) { this.age = age; }
+
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public void setWeight(double weight) { this.weight = weight; }
+
+    public void setGoal(String goal) { this.goal = goal; }
+
+    public void setMonthlyCost(double monthlyCost) { this.monthlyCost = monthlyCost; }
+
+    public void setRemainingDebt(double remainingDebt) { this.remainingDebt = remainingDebt; }
+
+    public void setDayOfPayment(int dayOfPayment) { this.dayOfPayment = dayOfPayment; }
+
+    public void setSubscriptionEndDate(String subscriptionEndDate) { this.subscriptionEndDate = subscriptionEndDate; }
+
+    public void setWeightTracking(List<Double> weightTracking) { this.weightTracking = weightTracking; }
+
+    public void setExerciseIds(ArrayList<String> exerciseIds) {
+        this.exerciseIds = exerciseIds;
     }
 
-    public String getName() {
+    // פעולות על התרגילים
 
-        return name;
-    }
-
-    public int getAge() {
-
-        return age;
-    }
-
-    public String getPhone() {
-
-        return phone;
-    }
-
-    public double getWeight() {
-        return weight;
-    }
-
-    public String getGoal(){
-        return goal;
-    }
-
-    public double getMonthlyCost() {
-
-        return monthlyCost;
-    }
-
-    public double getRemainingDebt() {
-
-        return remainingDebt;
-    }
-
-    public int getDayOfPayment() {
-
-        return dayOfPayment;
-    }
-
-    public String getSubscriptionEndDate() {
-
-        return subscriptionEndDate;
-    }
-
-    public List<Double> getWeightTracking() {
-
-        return weightTracking;
-    }
-
-    public static ArrayList<String> getExerciseIds() {
-        return exerciseIds;
-    }
-
-    //Setters
-    public void setId(String id) {
-
-        this.id = id;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public void setAge(int age) {
-
-        this.age = age;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-
-    public void setGoal(String goal){
-        this.goal = goal;
-    }
-    public void setMonthlyCost(double monthlyCost) {
-        this.monthlyCost = monthlyCost;
-    }
-
-    public void setRemainingDebt(double remainingDebt) {
-        this.remainingDebt = remainingDebt;
-    }
-
-    public void setDayOfPayment(int dayOfPayment) {
-        this.dayOfPayment = dayOfPayment;
-    }
-
-    public void setSubscriptionEndDate(String subscriptionEndDate) {
-        this.subscriptionEndDate = subscriptionEndDate;
-    }
-
-    public void setWeightTracking(List<Double> weightTracking) {
-        this.weightTracking = weightTracking;
-    }
-
-    public static void addExerciseId(String exerciseId) {
+    public void addExerciseId(String exerciseId) {
+        if (exerciseIds == null) {
+            exerciseIds = new ArrayList<>();
+        }
         exerciseIds.add(exerciseId);
     }
-    //יכול להיות שנוסיף כפתור למחוק את כל האימונים במכה
-    public static void clearExerciseIds() {
-        exerciseIds.clear();
+
+    public void clearExerciseIds() {
+        if (exerciseIds != null) {
+            exerciseIds.clear();
+        }
     }
 }

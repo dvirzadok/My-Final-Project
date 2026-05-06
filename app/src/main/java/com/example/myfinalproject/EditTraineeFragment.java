@@ -67,7 +67,7 @@ public class EditTraineeFragment extends Fragment {
     }
 
     private void loadTraineeData() {
-        currentTrainee = DataHolder.selectedTrainee;
+        currentTrainee = DataHolder.getSelectedTrainee();
         if (currentTrainee != null) {
             etName.setText(currentTrainee.getName());
             etAge.setText(String.valueOf(currentTrainee.getAge()));

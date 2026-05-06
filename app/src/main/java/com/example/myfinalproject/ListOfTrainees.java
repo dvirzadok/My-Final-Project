@@ -58,7 +58,7 @@ public class ListOfTrainees extends Fragment {
                     Trainee full = snapshot.getValue(Trainee.class);
 
                     if (full != null) {
-                        DataHolder.selectedTrainee = full;
+                        DataHolder.selectedTraineeFull = full;
 
                         getParentFragmentManager().beginTransaction()
                                 .replace(R.id.nav_host_fragment_content_main, new ViewTraineeFragment())

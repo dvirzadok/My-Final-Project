@@ -1,64 +1,82 @@
 package com.example.myfinalproject;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ViewTraineeExercise#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class ViewTraineeExercise extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView recyclerView;
+    private ExerciseAdapter adapter;
+    private Button btnCreate, btnDelete, btnBack; // הוספנו btnBack
+    private List<Exercise> allExercises;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ViewTraineeExercise() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ViewTraineeExercise.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ViewTraineeExercise newInstance(String param1, String param2) {
-        ViewTraineeExercise fragment = new ViewTraineeExercise();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    public ViewTraineeExercise() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_view_trainee_exercise, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_view_trainee_exercise, container, false);
+
+        recyclerView = view.findViewById(R.id.recyclerExercises);
+        btnCreate = view.findViewById(R.id.btnCreateExercise);
+        btnDelete = view.findViewById(R.id.btnDeleteExercise);
+        btnBack = view.findViewById(R.id.btnBackToPrograms); // קישור הכפתור
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        allExercises = SplashActivity.exercisesList;
+
+        adapter = new ExerciseAdapter(allExercises);
+        recyclerView.setAdapter(adapter);
+
+        // לחיצה על כפתור חזור
+        btnBack.setOnClickListener(v -> {
+            getParentFragmentManager().popBackStack(); // חוזר לפרגמנט הקודם (TrainingPrograms)
+        });
+
+        adapter.setOnItemClickListener(exercise -> {
+            MiniTrainee trainee = DataHolder.getSelectedMiniTrainee();
+
+            if (trainee != null) {
+                ArrayList<String> exerciseIds = trainee.getExerciseIds();
+                if (exerciseIds == null) exerciseIds = new ArrayList<>();
+
+                if (!exerciseIds.contains(exercise.getId())) {
+                    exerciseIds.add(exercise.getId());
+                    trainee.setExerciseIds(exerciseIds);
+
+                    DBref.TraineesRef.child(trainee.getId())
+                            .child("exerciseIds")
+                            .setValue(exerciseIds)
+                            .addOnSuccessListener(aVoid -> {
+                                if (getContext() != null) {
+                                    Toast.makeText(getContext(), "נוסף: " + exercise.getName() + " ✅", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    Toast.makeText(getContext(), "התרגיל כבר קיים", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btnCreate.setOnClickListener(v -> {
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.nav_host_fragment_content_main, new AddExerciseFragment())
+                    .addToBackStack(null)
+                    .commit();
+        });
+
+        return view;
     }
 }

@@ -7,39 +7,102 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.Spinner;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TrainingPrograms extends Fragment {
 
-    // הגדרת המשתנים שלנו
     private RecyclerView recyclerView;
-    private com.example.myfinalproject.ExerciseAdapter adapter;
-    private List<Exercise> exerciseList;
+    private ExerciseAdapter adapter;
 
-    public TrainingPrograms() {
-        // חייב להישאר ריק
-    }
+    private List<Exercise> exerciseList;
+    private List<Exercise> filteredList;
+
+    private Spinner spinnerTrainees;
+    private Button btnAddExercise; // הצהרה על הכפתור
+
+    public TrainingPrograms() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // 1. ניפוח ה-Layout (מחברים את הקובץ XML של הפרגמנט)
+
         View view = inflater.inflate(R.layout.fragment_training_programs, container, false);
 
-        // 2. מציאת ה-RecyclerView מתוך ה-XML (וודא שיש לו ID בשם rvExercises)
+        // אתחול רכיבי ה-UI
         recyclerView = view.findViewById(R.id.recyclerExercises);
+        spinnerTrainees = view.findViewById(R.id.spinnerTrainees);
+        btnAddExercise = view.findViewById(R.id.btnAddExercise); // מציאת הכפתור ב-XML
 
-        // 3. הגדרת מנהל תצוגה (LayoutManager) - מסדר את הכרטיסים בטור
+        // הגדרת ה-RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        // 4. שימוש ברשימה שהגיעה מה-Splash
         exerciseList = SplashActivity.exercisesList;
-
-        // 5. אתחול האדפטר וחיבורו ל-RecyclerView
-        adapter = new com.example.myfinalproject.ExerciseAdapter(exerciseList);
+        filteredList = new ArrayList<>();
+        adapter = new ExerciseAdapter(filteredList);
         recyclerView.setAdapter(adapter);
 
+        // הגדרת לחיצה על כפתור הוספת תרגיל
+        btnAddExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // מעבר למסך בחירת תרגילים (ViewTraineeExercise)
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.nav_host_fragment_content_main, new ViewTraineeExercise())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        setupSpinner();
+
         return view;
+    }
+
+    private void setupSpinner() {
+        List<MiniTrainee> trainees = SplashActivity.traineesList;
+
+        ArrayAdapter<MiniTrainee> spinnerAdapter = new ArrayAdapter<>(
+                getContext(),
+                android.R.layout.simple_spinner_item,
+                trainees
+        );
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerTrainees.setAdapter(spinnerAdapter);
+
+        spinnerTrainees.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                MiniTrainee selected = trainees.get(position);
+
+                // שמירת המתאמן שנבחר ב-DataHolder לשימוש במסכים הבאים
+                DataHolder.setSelectedMiniTrainee(selected);
+
+                // סינון התרגילים לפי המזהים שמשויכים למתאמן
+                filterExercises(selected.getExerciseIds());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
+
+    private void filterExercises(List<String> ids) {
+        filteredList.clear();
+
+        if (ids != null) {
+            for (Exercise ex : exerciseList) {
+                if (ids.contains(ex.getId())) {
+                    filteredList.add(ex);
+                }
+            }
+        }
+
+        adapter.notifyDataSetChanged();
     }
 }

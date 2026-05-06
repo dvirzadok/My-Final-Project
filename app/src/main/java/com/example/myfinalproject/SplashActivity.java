@@ -80,7 +80,8 @@ public class SplashActivity extends Activity {
                         MiniTrainee miniTrainee = new MiniTrainee(
                                 trainee.getId(),
                                 trainee.getName(),
-                                trainee.getGoal()
+                                trainee.getGoal(),
+                                trainee.getExerciseIds()
                         );
 
                         traineesList.add(miniTrainee);

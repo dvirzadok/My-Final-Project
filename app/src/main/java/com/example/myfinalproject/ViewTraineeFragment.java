@@ -39,7 +39,7 @@ public class ViewTraineeFragment extends Fragment {
 
         btnEdit = view.findViewById(R.id.btnEdit);
 
-        Trainee t = DataHolder.selectedTrainee;
+        Trainee t = DataHolder.getSelectedTrainee();
 
         if (t != null) {
 
@@ -57,7 +57,7 @@ public class ViewTraineeFragment extends Fragment {
             // אימונים של המתאמן
             // =========================
 
-            if (Trainee.getExerciseIds() == null || Trainee.getExerciseIds().isEmpty()) {
+            if (t.getExerciseIds() == null || t.getExerciseIds().isEmpty()) {
 
                 tvExercises.setText("עדיין אין אימונים");
 
@@ -65,7 +65,7 @@ public class ViewTraineeFragment extends Fragment {
 
                 StringBuilder result = new StringBuilder();
 
-                for (String id : Trainee.getExerciseIds()) {
+                for (String id : t.getExerciseIds()) {
 
                     for (Exercise ex : SplashActivity.exercisesList) {
 
