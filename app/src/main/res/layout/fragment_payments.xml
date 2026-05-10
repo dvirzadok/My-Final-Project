@@ -66,6 +66,15 @@
             android:text="תאריך חיוב:"
             android:layout_marginTop="8dp"/>
 
+        <!-- כפתור עדכון חוב -->
+        <Button
+            android:id="@+id/btnUpdateDebt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#03A9F4"
+            android:text="עדכון חוב"
+            android:layout_marginTop="32dp"/>
+
     </LinearLayout>
 
 </ScrollView>

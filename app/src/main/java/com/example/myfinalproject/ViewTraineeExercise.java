@@ -1,5 +1,6 @@
 package com.example.myfinalproject;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +19,7 @@ public class ViewTraineeExercise extends Fragment {
 
     private RecyclerView recyclerView;
     private ExerciseAdapter adapter;
-    private Button btnCreate, btnDelete, btnBack; // הוספנו btnBack
+    private Button btnCreate, btnBack;
     private List<Exercise> allExercises;
 
     public ViewTraineeExercise() {}
@@ -31,45 +32,30 @@ public class ViewTraineeExercise extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerExercises);
         btnCreate = view.findViewById(R.id.btnCreateExercise);
-        btnDelete = view.findViewById(R.id.btnDeleteExercise);
-        btnBack = view.findViewById(R.id.btnBackToPrograms); // קישור הכפתור
+        btnBack = view.findViewById(R.id.btnBackToPrograms);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // טעינת הרשימה הגלובלית מה-Splash
         allExercises = SplashActivity.exercisesList;
 
         adapter = new ExerciseAdapter(allExercises);
         recyclerView.setAdapter(adapter);
 
-        // לחיצה על כפתור חזור
-        btnBack.setOnClickListener(v -> {
-            getParentFragmentManager().popBackStack(); // חוזר לפרגמנט הקודם (TrainingPrograms)
-        });
-
+        // 1. הוספת תרגיל למתאמן הנוכחי בלחיצה רגילה על הכרטיס
         adapter.setOnItemClickListener(exercise -> {
-            MiniTrainee trainee = DataHolder.getSelectedMiniTrainee();
-
-            if (trainee != null) {
-                ArrayList<String> exerciseIds = trainee.getExerciseIds();
-                if (exerciseIds == null) exerciseIds = new ArrayList<>();
-
-                if (!exerciseIds.contains(exercise.getId())) {
-                    exerciseIds.add(exercise.getId());
-                    trainee.setExerciseIds(exerciseIds);
-
-                    DBref.TraineesRef.child(trainee.getId())
-                            .child("exerciseIds")
-                            .setValue(exerciseIds)
-                            .addOnSuccessListener(aVoid -> {
-                                if (getContext() != null) {
-                                    Toast.makeText(getContext(), "נוסף: " + exercise.getName() + " ✅", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                } else {
-                    Toast.makeText(getContext(), "התרגיל כבר קיים", Toast.LENGTH_SHORT).show();
-                }
-            }
+            addExerciseToCurrentTrainee(exercise);
         });
 
+        // 2. מחיקה גלובלית בלחיצה על האיקס (X)
+        adapter.setOnDeleteClickListener(exercise -> {
+            showGlobalDeleteConfirmation(exercise);
+        });
+
+        // כפתור חזור
+        btnBack.setOnClickListener(v -> getParentFragmentManager().popBackStack());
+
+        // כפתור יצירת תרגיל חדש
         btnCreate.setOnClickListener(v -> {
             getParentFragmentManager().beginTransaction()
                     .replace(R.id.nav_host_fragment_content_main, new AddExerciseFragment())
@@ -78,5 +64,66 @@ public class ViewTraineeExercise extends Fragment {
         });
 
         return view;
+    }
+
+    // --- לוגיקה להוספה למתאמן הספציפי ---
+    private void addExerciseToCurrentTrainee(Exercise exercise) {
+        MiniTrainee trainee = DataHolder.getSelectedMiniTrainee();
+        if (trainee == null) {
+            Toast.makeText(getContext(), "אנא בחר מתאמן תחילה", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ArrayList<String> exerciseIds = trainee.getExerciseIds();
+        if (exerciseIds == null) exerciseIds = new ArrayList<>();
+
+        if (!exerciseIds.contains(exercise.getId())) {
+            exerciseIds.add(exercise.getId());
+            trainee.setExerciseIds(exerciseIds);
+
+            DBref.TraineesRef.child(trainee.getId()).child("exerciseIds")
+                    .setValue(exerciseIds)
+                    .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "התרגיל נוסף לתוכנית! ✅", Toast.LENGTH_SHORT).show());
+        } else {
+            Toast.makeText(getContext(), "התרגיל כבר קיים אצל המתאמן", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // --- לוגיקה למחיקה גלובלית ---
+    private void showGlobalDeleteConfirmation(Exercise exercise) {
+        new AlertDialog.Builder(getContext())
+                .setTitle("מחיקה גלובלית")
+                .setMessage("האם אתה בטוח שברצונך למחוק את '" + exercise.getName() + "' לצמיתות מכל המתאמנים ומהמאגר?")
+                .setPositiveButton("מחק הכל", (dialog, which) -> deleteExerciseFromEverywhere(exercise))
+                .setNegativeButton("ביטול", null)
+                .setIcon(android.R.drawable.ic_delete)
+                .show();
+    }
+
+    private void deleteExerciseFromEverywhere(Exercise exercise) {
+        String exerciseId = exercise.getId();
+
+        // א. מחיקה מהרשימה הכללית ב-Firebase
+        DBref.ExercisesRef.child(exerciseId).removeValue();
+
+        // ב. מחיקה מהרשימה הלוקאלית (כדי שייעלם מהמסך מיד)
+        allExercises.remove(exercise);
+        adapter.notifyDataSetChanged();
+
+        // ג. מעבר על כל המתאמנים וניקוי ה-ID שלהם
+        // אנחנו משתמשים ברשימה שנמצאת ב-SplashActivity.traineesList
+        for (MiniTrainee trainee : SplashActivity.traineesList) {
+            if (trainee.getExerciseIds() != null && trainee.getExerciseIds().contains(exerciseId)) {
+
+                // הסרה מקומית מהאובייקט
+                trainee.getExerciseIds().remove(exerciseId);
+
+                // עדכון ב-Firebase עבור כל מתאמן שנמצא עם התרגיל הזה
+                DBref.TraineesRef.child(trainee.getId()).child("exerciseIds")
+                        .setValue(trainee.getExerciseIds());
+            }
+        }
+
+        Toast.makeText(getContext(), "התרגיל נמחק מכל המערכת", Toast.LENGTH_SHORT).show();
     }
 }

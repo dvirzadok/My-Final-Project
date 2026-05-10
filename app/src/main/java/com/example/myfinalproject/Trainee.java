@@ -80,7 +80,6 @@ public class Trainee {
     public ArrayList<String> getExerciseIds() { return exerciseIds; }
 
     // Setters
-
     public void setId(String id) { this.id = id; }
 
     public void setName(String name) { this.name = name; }

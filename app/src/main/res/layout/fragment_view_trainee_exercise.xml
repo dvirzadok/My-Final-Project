@@ -28,12 +28,6 @@
         android:backgroundTint="#03A9F4"
         android:text="יצירת תרגיל חדש"/>
 
-    <Button
-        android:id="@+id/btnDeleteExercise"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#E91E1E"
-        android:text="מחיקת תרגיל (גלובלי)"/>
 
     <Button
         android:id="@+id/btnBackToPrograms"

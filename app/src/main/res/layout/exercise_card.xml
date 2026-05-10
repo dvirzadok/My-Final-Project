@@ -9,61 +9,77 @@
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="שם התרגיל"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/btnDeleteFromTrainee"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="#E91E63" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp">
+            android:layout_toStartOf="@id/btnDeleteFromTrainee"
+            android:layout_alignParentStart="true"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvReps"
-                android:layout_width="177dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="חזרות: 0"
-                android:textColor="@color/design_default_color_primary"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tvSets"
-                android:layout_width="179dp"
+                android:id="@+id/tvName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="סטים: 0"
-                android:textColor="@color/design_default_color_primary"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tvWeight"
-                android:layout_width="87dp"
-                android:layout_height="wrap_content"
-                android:text="0.0 קג"
-                android:textColor="@color/design_default_color_primary"
+                android:text="שם התרגיל"
+                android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/tvReps"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="חזרות: 0"
+                    android:textColor="@color/design_default_color_primary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvSets"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="סטים: 0"
+                    android:textColor="@color/design_default_color_primary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.0 קג"
+                    android:textColor="@color/design_default_color_primary"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="הערות..."
+                android:textColor="#666666"
+                android:fontStyle="italic" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvNotes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="הערות..."
-            android:textColor="#666666"
-            android:fontStyle="italic" />
-
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>
