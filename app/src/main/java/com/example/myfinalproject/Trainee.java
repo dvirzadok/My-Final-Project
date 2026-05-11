@@ -20,7 +20,7 @@ public class Trainee {
     private int dayOfPayment;
     private String subscriptionEndDate;
 
-    private List<Double> weightTracking;
+    private List<WeightEntry> weightTracking;
 
     public Trainee() {
         // חשוב לפיירבייס
@@ -30,7 +30,7 @@ public class Trainee {
                    double weight,
                    double monthlyCost, double remainingDebt,
                    int dayOfPayment, String subscriptionEndDate, String goal,
-                   List<Double> weightTracking,
+                   List<WeightEntry> weightTracking,
                    ArrayList<String> exerciseIds) {
 
         this.id = id;
@@ -75,9 +75,9 @@ public class Trainee {
 
     public String getSubscriptionEndDate() { return subscriptionEndDate; }
 
-    public List<Double> getWeightTracking() { return weightTracking; }
+    public List<WeightEntry> getWeightTracking() { return weightTracking; }
 
-    public ArrayList<String> getExerciseIds() { return exerciseIds; }
+    public  ArrayList<String> getExerciseIds() { return exerciseIds; }
 
     // Setters
     public void setId(String id) { this.id = id; }
@@ -100,7 +100,7 @@ public class Trainee {
 
     public void setSubscriptionEndDate(String subscriptionEndDate) { this.subscriptionEndDate = subscriptionEndDate; }
 
-    public void setWeightTracking(List<Double> weightTracking) { this.weightTracking = weightTracking; }
+    public void setWeightTracking(List<WeightEntry> weightTracking) { this.weightTracking = weightTracking; }
 
     public void setExerciseIds(ArrayList<String> exerciseIds) {
         this.exerciseIds = exerciseIds;

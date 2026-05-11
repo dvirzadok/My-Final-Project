@@ -1,64 +1,285 @@
 package com.example.myfinalproject;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProgressTracking#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
 public class ProgressTracking extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private Spinner spinnerProgressTrainee;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Button btnAddProgress;
+
+    private ArrayList<Trainee> trainees;
+
+    private Trainee selectedTrainee;
 
     public ProgressTracking() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProgressTracking.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProgressTracking newInstance(String param1, String param2) {
-        ProgressTracking fragment = new ProgressTracking();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_progress_tracking, container, false);
+
+        View view = inflater.inflate(
+                R.layout.fragment_progress_tracking,
+                container,
+                false
+        );
+
+        spinnerProgressTrainee =
+                view.findViewById(R.id.spinnerProgressTrainee);
+
+        btnAddProgress =
+                view.findViewById(R.id.btnAddProgress);
+
+        trainees = new ArrayList<>();
+
+        loadTrainees();
+
+        spinnerProgressTrainee.setOnItemSelectedListener(
+                new android.widget.AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(
+                            android.widget.AdapterView<?> adapterView,
+                            View view,
+                            int position,
+                            long l
+                    ) {
+
+                        selectedTrainee =
+                                trainees.get(position);
+                    }
+
+                    @Override
+                    public void onNothingSelected(
+                            android.widget.AdapterView<?> adapterView
+                    ) {
+
+                    }
+                }
+        );
+
+        btnAddProgress.setOnClickListener(
+                new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+                        showAddWeightDialog();
+                    }
+                }
+        );
+
+        return view;
+    }
+
+    private void loadTrainees() {
+
+        DBref.TraineesRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(
+                            @NonNull DataSnapshot snapshot
+                    ) {
+
+                        trainees.clear();
+
+                        ArrayList<String> traineeNames =
+                                new ArrayList<>();
+
+                        for (DataSnapshot data :
+                                snapshot.getChildren()) {
+
+                            Trainee trainee =
+                                    data.getValue(Trainee.class);
+
+                            if (trainee != null) {
+
+                                trainees.add(trainee);
+
+                                traineeNames.add(
+                                        trainee.getName()
+                                );
+                            }
+                        }
+
+                        ArrayAdapter<String> adapter =
+                                new ArrayAdapter<>(
+                                        requireContext(),
+                                        android.R.layout.simple_spinner_item,
+                                        traineeNames
+                                );
+
+                        adapter.setDropDownViewResource(
+                                android.R.layout.simple_spinner_dropdown_item
+                        );
+
+                        spinnerProgressTrainee.setAdapter(
+                                adapter
+                        );
+
+                        if (!trainees.isEmpty()) {
+
+                            selectedTrainee =
+                                    trainees.get(0);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(
+                            @NonNull DatabaseError error
+                    ) {
+
+                    }
+                }
+        );
+    }
+
+    private void showAddWeightDialog() {
+
+        if (selectedTrainee == null) {
+
+            Toast.makeText(
+                    getContext(),
+                    "לא נבחר מתאמן",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(getContext());
+
+        builder.setTitle("הוסף שקילה חדשה");
+
+        final EditText input =
+                new EditText(getContext());
+
+        input.setHint("הכנס משקל");
+
+        input.setInputType(
+                InputType.TYPE_CLASS_NUMBER |
+                        InputType.TYPE_NUMBER_FLAG_DECIMAL
+        );
+
+        builder.setView(input);
+
+        builder.setPositiveButton(
+                "שמור",
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(
+                            DialogInterface dialogInterface,
+                            int i
+                    ) {
+
+                        String weightStr =
+                                input.getText()
+                                        .toString()
+                                        .trim();
+
+                        if (weightStr.isEmpty()) {
+
+                            Toast.makeText(
+                                    getContext(),
+                                    "הכנס משקל",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+
+                            return;
+                        }
+
+                        double newWeight =
+                                Double.parseDouble(weightStr);
+
+                        String currentDate =
+                                new SimpleDateFormat(
+                                        "yyyy-MM-dd",
+                                        Locale.getDefault()
+                                ).format(new Date());
+
+                        WeightEntry newEntry =
+                                new WeightEntry(
+                                        newWeight,
+                                        currentDate
+                                );
+
+                        // אם הרשימה ריקה
+                        if (selectedTrainee
+                                .getWeightTracking() == null) {
+
+                            selectedTrainee.setWeightTracking(
+                                    new ArrayList<WeightEntry>()
+                            );
+                        }
+
+                        // הוספת השקילה
+                        selectedTrainee
+                                .getWeightTracking()
+                                .add(newEntry);
+
+                        // עדכון משקל נוכחי
+                        selectedTrainee
+                                .setWeight(newWeight);
+
+                        // עדכון Firebase
+                        DBref.TraineesRef
+                                .child(selectedTrainee.getId())
+                                .setValue(selectedTrainee)
+
+                                .addOnSuccessListener(aVoid -> {
+
+                                    Toast.makeText(
+                                            getContext(),
+                                            "השקילה נוספה בהצלחה",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+                                })
+
+                                .addOnFailureListener(e -> {
+
+                                    Toast.makeText(
+                                            getContext(),
+                                            "שגיאה: " + e.getMessage(),
+                                            Toast.LENGTH_LONG
+                                    ).show();
+                                });
+                    }
+                }
+        );
+
+        builder.setNegativeButton(
+                "ביטול",
+                null
+        );
+
+        builder.show();
     }
 }

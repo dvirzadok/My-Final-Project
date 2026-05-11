@@ -99,6 +99,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#FF5252"
+            android:text="מחק מתאמן" />
+
+        <Button
+            android:id="@+id/btnBackk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="חזור"
+            android:backgroundTint="#03A9F4"
+            android:textAllCaps="false"/>
+
     </LinearLayout>
 
 </ScrollView>
