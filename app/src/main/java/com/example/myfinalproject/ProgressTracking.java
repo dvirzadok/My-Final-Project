@@ -7,15 +7,21 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -30,6 +36,10 @@ public class ProgressTracking extends Fragment {
     private Spinner spinnerProgressTrainee;
 
     private Button btnAddProgress;
+
+    private ListView listViewProgress;
+
+    private LineChart lineChart;
 
     private ArrayList<Trainee> trainees;
 
@@ -55,16 +65,22 @@ public class ProgressTracking extends Fragment {
         btnAddProgress =
                 view.findViewById(R.id.btnAddProgress);
 
+        listViewProgress =
+                view.findViewById(R.id.listViewProgress);
+
+        lineChart =
+                view.findViewById(R.id.lineChart);
+
         trainees = new ArrayList<>();
 
         loadTrainees();
 
         spinnerProgressTrainee.setOnItemSelectedListener(
-                new android.widget.AdapterView.OnItemSelectedListener() {
+                new AdapterView.OnItemSelectedListener() {
 
                     @Override
                     public void onItemSelected(
-                            android.widget.AdapterView<?> adapterView,
+                            AdapterView<?> adapterView,
                             View view,
                             int position,
                             long l
@@ -72,11 +88,15 @@ public class ProgressTracking extends Fragment {
 
                         selectedTrainee =
                                 trainees.get(position);
+
+                        showWeightTracking();
+
+                        showChart();
                     }
 
                     @Override
                     public void onNothingSelected(
-                            android.widget.AdapterView<?> adapterView
+                            AdapterView<?> adapterView
                     ) {
 
                     }
@@ -147,6 +167,10 @@ public class ProgressTracking extends Fragment {
 
                             selectedTrainee =
                                     trainees.get(0);
+
+                            showWeightTracking();
+
+                            showChart();
                         }
                     }
 
@@ -158,6 +182,90 @@ public class ProgressTracking extends Fragment {
                     }
                 }
         );
+    }
+
+    private void showWeightTracking() {
+
+        if (selectedTrainee == null) {
+            return;
+        }
+
+        ArrayList<String> trackingList =
+                new ArrayList<>();
+
+        if (selectedTrainee.getWeightTracking() == null ||
+                selectedTrainee.getWeightTracking().isEmpty()) {
+
+            trackingList.add("אין נתוני שקילה");
+
+        } else {
+
+            for (WeightEntry entry :
+                    selectedTrainee.getWeightTracking()) {
+
+                String row =
+                        "תאריך: "
+                                + entry.getDate()
+                                + " | משקל: "
+                                + entry.getWeight()
+                                + " ק\"ג";
+
+                trackingList.add(row);
+            }
+        }
+
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(
+                        requireContext(),
+                        android.R.layout.simple_list_item_1,
+                        trackingList
+                );
+
+        listViewProgress.setAdapter(adapter);
+    }
+
+    private void showChart() {
+
+        if (selectedTrainee == null) {
+            return;
+        }
+
+        ArrayList<Entry> entries =
+                new ArrayList<>();
+
+        ArrayList<WeightEntry> weights =
+                (ArrayList<WeightEntry>)
+                        selectedTrainee.getWeightTracking();
+
+        if (weights == null || weights.isEmpty()) {
+
+            lineChart.clear();
+
+            return;
+        }
+
+        for (int i = 0; i < weights.size(); i++) {
+
+            WeightEntry entry =
+                    weights.get(i);
+
+            entries.add(
+                    new Entry(
+                            i,
+                            (float) entry.getWeight()
+                    )
+            );
+        }
+
+        LineDataSet dataSet =
+                new LineDataSet(entries, "משקל");
+
+        LineData lineData =
+                new LineData(dataSet);
+
+        lineChart.setData(lineData);
+
+        lineChart.invalidate();
     }
 
     private void showAddWeightDialog() {
@@ -231,7 +339,6 @@ public class ProgressTracking extends Fragment {
                                         currentDate
                                 );
 
-                        // אם הרשימה ריקה
                         if (selectedTrainee
                                 .getWeightTracking() == null) {
 
@@ -240,16 +347,13 @@ public class ProgressTracking extends Fragment {
                             );
                         }
 
-                        // הוספת השקילה
                         selectedTrainee
                                 .getWeightTracking()
                                 .add(newEntry);
 
-                        // עדכון משקל נוכחי
                         selectedTrainee
                                 .setWeight(newWeight);
 
-                        // עדכון Firebase
                         DBref.TraineesRef
                                 .child(selectedTrainee.getId())
                                 .setValue(selectedTrainee)
@@ -261,6 +365,10 @@ public class ProgressTracking extends Fragment {
                                             "השקילה נוספה בהצלחה",
                                             Toast.LENGTH_SHORT
                                     ).show();
+
+                                    showWeightTracking();
+
+                                    showChart();
                                 })
 
                                 .addOnFailureListener(e -> {
